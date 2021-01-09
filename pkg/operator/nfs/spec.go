@@ -89,7 +89,7 @@ func newStatefulSetForNFSServer(cr *nfsv1alpha1.NFSServer) *appsv1.StatefulSet {
 					Containers: []corev1.Container{
 						{
 							Name:  "nfs-server",
-							Image: "rook/nfs:master",
+							Image: "esalierno/nfs:v1.5.4",
 							Args:  []string{"nfs", "server", "--ganeshaConfigPath=" + nfsConfigMapPath + "/" + cr.Name},
 							Ports: []corev1.ContainerPort{
 								{
@@ -112,7 +112,7 @@ func newStatefulSetForNFSServer(cr *nfsv1alpha1.NFSServer) *appsv1.StatefulSet {
 						},
 						{
 							Name:                     "nfs-provisioner",
-							Image:                    "rook/nfs:master",
+							Image:                    "esalierno/nfs:v1.5.4",
 							Args:                     []string{"nfs", "provisioner", "--provisioner=" + "nfs.rook.io/" + cr.Name + "-provisioner"},
 							TerminationMessagePath:   "/dev/termination-log",
 							TerminationMessagePolicy: corev1.TerminationMessageReadFile,
