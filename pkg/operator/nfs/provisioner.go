@@ -34,6 +34,8 @@ import (
 	"k8s.io/kubernetes/pkg/apis/core/v1/helper"
 	"sigs.k8s.io/sig-storage-lib-external-provisioner/v6/controller"
 
+	"syscall"
+
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -127,7 +129,8 @@ func (p *Provisioner) Provision(ctx context.Context, options controller.Provisio
 
 	pvName := strings.Join([]string{options.PVC.Namespace, options.PVC.Name, options.PVName}, "-")
 	fullPath := path.Join(exportPath, pvName)
-	if err := os.MkdirAll(fullPath, 0700); err != nil {
+	syscall.Umask(002)
+	if err := os.MkdirAll(fullPath, 0770); err != nil {
 		return nil, controller.ProvisioningFinished, errors.New("unable to create directory to provision new pv: " + err.Error())
 	}
 
